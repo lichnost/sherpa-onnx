@@ -725,12 +725,14 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
                 result = self.recognizer.get_result(stream)
 
                 message = {
+                    "is_final": 0,
                     "text": result,
                     "segment": segment,
                 }
                 if self.recognizer.is_endpoint(stream):
                     self.recognizer.reset(stream)
                     segment += 1
+                    message["is_final"] = 2
 
                 await socket.send(json.dumps(message))
 
@@ -743,6 +745,7 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
         result = self.recognizer.get_result(stream)
 
         message = {
+            "is_final": 2,
             "text": result,
             "segment": segment,
         }
