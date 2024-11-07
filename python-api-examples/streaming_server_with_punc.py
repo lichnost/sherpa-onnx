@@ -762,7 +762,6 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
         stream.input_finished()
         while self.recognizer.is_ready(stream):
             await self.compute_and_decode(stream)
-        
         result = self.recognizer.get_result(stream)
         message = {
             "is_final": 2,

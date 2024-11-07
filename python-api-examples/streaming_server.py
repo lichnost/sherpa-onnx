@@ -508,7 +508,6 @@ class StreamingServer(object):
             it (the default generated filename is `cert.pem`).
         """
         self.recognizer = recognizer
-
         self.certificate = certificate
         self.http_server = HttpServer(doc_root)
 
@@ -719,11 +718,9 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
             # TODO(fangjun): At present, we assume the sampling rate
             # of the received audio samples equal to --sample-rate
             stream.accept_waveform(sample_rate=self.sample_rate, waveform=samples)
-
-            while self.recognizer.is_ready(stream):
+            while self.recognizer.is_ready(stream):    
                 await self.compute_and_decode(stream)
                 result = self.recognizer.get_result(stream)
-
                 message = {
                     "is_final": 0,
                     "text": result,
@@ -732,24 +729,21 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
                 if self.recognizer.is_endpoint(stream):
                     self.recognizer.reset(stream)
                     segment += 1
-                    message["is_final"] = 2
+                    message["is_final"] = 1
 
                 await socket.send(json.dumps(message))
 
-        tail_padding = np.zeros(int(self.sample_rate * 0.3)).astype(np.float32)
+        tail_padding = np.zeros(int(self.sample_rate * 1.0)).astype(np.float32)
         stream.accept_waveform(sample_rate=self.sample_rate, waveform=tail_padding)
         stream.input_finished()
         while self.recognizer.is_ready(stream):
             await self.compute_and_decode(stream)
-
         result = self.recognizer.get_result(stream)
-
         message = {
             "is_final": 2,
             "text": result,
             "segment": segment,
         }
-
         await socket.send(json.dumps(message))
 
     async def recv_audio_samples(
