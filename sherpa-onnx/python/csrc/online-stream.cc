@@ -31,7 +31,8 @@ void PybindOnlineStream(py::module *m) {
           py::arg("sample_rate"), py::arg("waveform"), kAcceptWaveformUsage,
           py::call_guard<py::gil_scoped_release>())
       .def("input_finished", &PyClass::InputFinished,
-           py::call_guard<py::gil_scoped_release>());
+           py::call_guard<py::gil_scoped_release>())
+      .def_readwrite("lang_id", &OnlineStream::lang_id);
 }
 
 }  // namespace sherpa_onnx

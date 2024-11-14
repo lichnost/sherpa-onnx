@@ -528,6 +528,16 @@ class StreamingServer(object):
         self.current_active_connections = 0
 
         self.sample_rate = int(recognizer.config.feat_config.sampling_rate)
+        self.langtag2id = {
+            '<ZH>': 2,
+            '<EN>': 3,
+            '<VI>': 4,
+            '<RU>': 5,
+            '<JA>': 6,
+            '<AR>': 7,
+            '<TH>': 8,
+            '<ID>': 9
+        }
 
     async def stream_consumer_task(self):
         """This function extracts streams from the queue, batches them up, sends
@@ -709,12 +719,15 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
 
         stream = self.recognizer.create_stream()
         segment = 0
-
         while True:
             samples = await self.recv_audio_samples(socket)
             if samples is None:
                 break
-
+            # 如果传递 langtag，则修改 lang_id，否则 lang_id 保持为 blank_id（0），不影响其他模型的正常部署
+            if isinstance(samples, int):
+                stream.lang_id = samples
+                continue
+            
             # TODO(fangjun): At present, we assume the sampling rate
             # of the received audio samples equal to --sample-rate
             stream.accept_waveform(sample_rate=self.sample_rate, waveform=samples)
@@ -725,6 +738,7 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
                     "is_final": 0,
                     "text": result,
                     "segment": segment,
+                    "lang_id": stream.lang_id
                 }
                 if self.recognizer.is_endpoint(stream):
                     self.recognizer.reset(stream)
@@ -743,6 +757,7 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
             "is_final": 2,
             "text": result,
             "segment": segment,
+            "lang_id": stream.lang_id
         }
         await socket.send(json.dumps(message))
 
@@ -765,7 +780,8 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
         message = await socket.recv()
         if message == "Done":
             return None
-
+        if message in self.langtag2id:
+            return self.langtag2id[message]
         return np.frombuffer(message, dtype=np.float32)
 
 

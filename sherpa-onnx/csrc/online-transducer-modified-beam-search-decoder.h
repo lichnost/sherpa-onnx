@@ -30,7 +30,7 @@ class OnlineTransducerModifiedBeamSearchDecoder
         unk_id_(unk_id),
         blank_penalty_(blank_penalty) {}
 
-  OnlineTransducerDecoderResult GetEmptyResult() const override;
+  OnlineTransducerDecoderResult GetEmptyResult(OnlineStream *stream) const override;
 
   void StripLeadingBlanks(OnlineTransducerDecoderResult *r) const override;
 

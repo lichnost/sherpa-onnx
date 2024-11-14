@@ -285,7 +285,7 @@ class OnlineRecognizerTransducerImpl : public OnlineRecognizerImpl {
     decoder_->UpdateDecoderOut(&s->GetResult());
     Ort::Value decoder_out = std::move(s->GetResult().decoder_out);
 
-    auto r = decoder_->GetEmptyResult();
+    auto r = decoder_->GetEmptyResult(s);
     if (config_.decoding_method == "modified_beam_search" &&
         nullptr != s->GetContextGraph()) {
       for (auto it = r.hyps.begin(); it != r.hyps.end(); ++it) {
@@ -343,7 +343,7 @@ class OnlineRecognizerTransducerImpl : public OnlineRecognizerImpl {
 #endif
 
   void InitOnlineStream(OnlineStream *stream) const {
-    auto r = decoder_->GetEmptyResult();
+    auto r = decoder_->GetEmptyResult(stream);
 
     if (config_.decoding_method == "modified_beam_search" &&
         nullptr != stream->GetContextGraph()) {

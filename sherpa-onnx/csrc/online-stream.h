@@ -25,6 +25,9 @@ class OnlineStream {
                         ContextGraphPtr context_graph = nullptr);
   ~OnlineStream();
 
+  // 添加成员 lang_id
+  int32_t lang_id = 0;
+ 
   /**
      @param sampling_rate The sampling_rate of the input waveform. If it does
                           not equal to  config.sampling_rate, we will do

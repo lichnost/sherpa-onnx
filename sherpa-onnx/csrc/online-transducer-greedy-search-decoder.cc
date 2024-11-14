@@ -3,6 +3,7 @@
 // Copyright (c)  2023  Xiaomi Corporation
 
 #include "sherpa-onnx/csrc/online-transducer-greedy-search-decoder.h"
+#include "sherpa-onnx/csrc/online-stream.h"
 
 #include <algorithm>
 #include <utility>
@@ -51,9 +52,9 @@ static void UpdateCachedDecoderOut(
 }
 
 OnlineTransducerDecoderResult
-OnlineTransducerGreedySearchDecoder::GetEmptyResult() const {
+OnlineTransducerGreedySearchDecoder::GetEmptyResult(OnlineStream* stream) const {
   int32_t context_size = model_->ContextSize();
-  int32_t blank_id = 0;  // always 0
+  int32_t blank_id = stream->lang_id;  // default is 0, could be lang_id
   OnlineTransducerDecoderResult r;
   r.tokens.resize(context_size, -1);
   r.tokens.back() = blank_id;

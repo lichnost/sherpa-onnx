@@ -85,6 +85,13 @@ def get_args():
         default=50151,
         help="Port of the server",
     )
+    
+    parser.add_argument(
+        "--langtag",
+        type=str,
+        default=None,
+        help="Port of the server",
+    )
 
     parser.add_argument(
         "--samples-per-message",
@@ -124,6 +131,7 @@ async def receive_results(socket: websockets.WebSocketServerProtocol):
 async def run(
     server_addr: str,
     server_port: int,
+    langtag,
     wave_filename: str,
     samples_per_message: int,
     seconds_per_message: float,
@@ -131,9 +139,9 @@ async def run(
     data = read_wave(wave_filename)
     use_ssl = True
     if use_ssl:
-        cafile = "/mgData3/yangbo/sherpa-onnx/python-api-examples/web/selfsigned.crt"
-        certfile = "/mgData3/yangbo/sherpa-onnx/python-api-examples/web/cert.pem"
-        keyfile = "/mgData3/yangbo/sherpa-onnx/python-api-examples/web/private.key"
+        cafile = "../../python-api-examples/web/selfsigned.crt"
+        certfile = "../../python-api-examples/web/cert.pem"
+        keyfile = "../../python-api-examples/web/private.key"
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH, cafile=cafile)
         ssl_context.load_cert_chain(certfile=certfile, keyfile=keyfile)
@@ -147,7 +155,9 @@ async def run(
         logging.info(f"Sending {wave_filename}")
 
         receive_task = asyncio.create_task(receive_results(websocket))
-
+        # 发送langtag
+        if langtag:
+            await websocket.send(langtag)
         start = 0
         while start < data.shape[0]:
             end = start + samples_per_message
@@ -174,12 +184,14 @@ async def main():
 
     server_addr = args.server_addr
     server_port = args.server_port
+    langtag = args.langtag
     samples_per_message = args.samples_per_message
     seconds_per_message = args.seconds_per_message
 
     await run(
         server_addr=server_addr,
         server_port=server_port,
+        langtag = langtag,
         wave_filename=args.sound_file,
         samples_per_message=samples_per_message,
         seconds_per_message=seconds_per_message,

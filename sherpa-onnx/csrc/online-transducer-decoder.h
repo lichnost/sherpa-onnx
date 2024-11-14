@@ -57,7 +57,7 @@ class OnlineTransducerDecoder {
    * to the beginning of the decoding result, which will be
    * stripped by calling `StripPrecedingBlanks()`.
    */
-  virtual OnlineTransducerDecoderResult GetEmptyResult() const = 0;
+  virtual OnlineTransducerDecoderResult GetEmptyResult(OnlineStream *stream) const = 0;
 
   /** Strip blanks added by `GetEmptyResult()`.
    *

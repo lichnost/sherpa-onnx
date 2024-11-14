@@ -38,7 +38,7 @@ static void UseCachedDecoderOut(
 }
 
 OnlineTransducerDecoderResult
-OnlineTransducerModifiedBeamSearchDecoder::GetEmptyResult() const {
+OnlineTransducerModifiedBeamSearchDecoder::GetEmptyResult(OnlineStream *stream) const {
   int32_t context_size = model_->ContextSize();
   int32_t blank_id = 0;  // always 0
   OnlineTransducerDecoderResult r;
