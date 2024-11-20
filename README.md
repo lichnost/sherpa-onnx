@@ -1,7 +1,5 @@
 # Introduction
 
-Documentation: <https://k2-fsa.github.io/sherpa/onnx/index.html>
-
 **This repo is specifically designed for the deployment of multilingual ASR models, while also being compatible with standard monolingual ASR models.**
 
 # Installation(with CUDA)
