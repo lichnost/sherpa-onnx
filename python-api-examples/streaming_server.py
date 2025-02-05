@@ -741,7 +741,7 @@ Go back to <a href="/streaming_record.html">/streaming_record.html</a>
                     "lang_id": stream.lang_id
                 }
                 if self.recognizer.is_endpoint(stream):
-                    self.recognizer.reset(stream)
+                    # self.recognizer.reset(stream)
                     segment += 1
                     message["is_final"] = 1
 
