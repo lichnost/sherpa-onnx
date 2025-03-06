@@ -58,5 +58,15 @@ The started ASR service can be tested like this:
 python sherpa-onnx/python-api-examples/online-websocket-client-decode-file-cert.py \
   --server-addr localhost \
   --server-port 50351 \
+  --langtag '<VI>' \
   test_audio.wav
 ```
+`<VI>` is the langtag for Vietnamese，the langtags for other languages ares:
+ - `<ZH>`, Chinese
+ - `<EN>`, English
+ - `<VI>`, Vietnamese
+ - `<RU>`, Russian
+ - `<JA>`, Japanese
+ - `<AR>`, Arabic
+ - `<TH>`, Thai
+ - `<ID>`, Indonisian
