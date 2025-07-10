@@ -228,6 +228,16 @@ void InputFinished(SherpaOnnxOnlineStream *stream) {
   stream->impl->InputFinished();
 }
 
+// Получить lang_id для OnlineStream
+int32_t SherpaOnnxOnlineStreamGetLangId(SherpaOnnxOnlineStream *stream) {
+  return stream->impl->lang_id;
+}
+
+// Установить lang_id для OnlineStream
+void SherpaOnnxOnlineStreamSetLangId(SherpaOnnxOnlineStream *stream, int32_t lang_id) {
+  stream->impl->lang_id = lang_id;
+}
+
 int32_t IsEndpoint(SherpaOnnxOnlineRecognizer *recognizer,
                    SherpaOnnxOnlineStream *stream) {
   return recognizer->impl->IsEndpoint(stream->impl.get());

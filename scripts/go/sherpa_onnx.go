@@ -137,6 +137,16 @@ type OnlineStream struct {
 	impl *C.struct_SherpaOnnxOnlineStream
 }
 
+// Получить lang_id для OnlineStream
+func (s *OnlineStream) LangId() int {
+	return int(C.SherpaOnnxOnlineStreamGetLangId(s.impl))
+}
+
+// Установить lang_id для OnlineStream
+func (s *OnlineStream) SetLangId(langId int) {
+	C.SherpaOnnxOnlineStreamSetLangId(s.impl, C.int(langId))
+}
+
 // Free the internal pointer inside the recognizer to avoid memory leak.
 func DeleteOnlineRecognizer(recognizer *OnlineRecognizer) {
 	C.DestroyOnlineRecognizer(recognizer.impl)

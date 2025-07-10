@@ -18,6 +18,11 @@
 extern "C" {
 #endif
 
+// Получить lang_id для OnlineStream
+SHERPA_ONNX_API int32_t SherpaOnnxOnlineStreamGetLangId(SherpaOnnxOnlineStream *stream);
+// Установить lang_id для OnlineStream
+SHERPA_ONNX_API void SherpaOnnxOnlineStreamSetLangId(SherpaOnnxOnlineStream *stream, int32_t lang_id);
+
 // See https://github.com/pytorch/pytorch/blob/main/c10/macros/Export.h
 // We will set SHERPA_ONNX_BUILD_SHARED_LIBS and SHERPA_ONNX_BUILD_MAIN_LIB in
 // CMakeLists.txt
