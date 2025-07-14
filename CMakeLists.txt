@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(sherpa-onnx)
 
-set(SHERPA_ONNX_VERSION "1.9.10")
+set(SHERPA_ONNX_VERSION "1.9.10-mulang")
 
 # Disable warning about
 #
@@ -11,14 +11,14 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
   cmake_policy(SET CMP0135 NEW)
 endif()
 
-option(SHERPA_ONNX_ENABLE_PYTHON "Whether to build Python" OFF)
+option(SHERPA_ONNX_ENABLE_PYTHON "Whether to build Python" ON)
 option(SHERPA_ONNX_ENABLE_TESTS "Whether to build tests" OFF)
 option(SHERPA_ONNX_ENABLE_CHECK "Whether to build with assert" OFF)
-option(BUILD_SHARED_LIBS "Whether to build shared libraries" OFF)
+option(BUILD_SHARED_LIBS "Whether to build shared libraries" ON)
 option(SHERPA_ONNX_ENABLE_PORTAUDIO "Whether to build with portaudio" ON)
 option(SHERPA_ONNX_ENABLE_JNI "Whether to build JNI internface" OFF)
 option(SHERPA_ONNX_ENABLE_C_API "Whether to build C API" ON)
-option(SHERPA_ONNX_ENABLE_WEBSOCKET "Whether to build webscoket server/client" ON)
+option(SHERPA_ONNX_ENABLE_WEBSOCKET "Whether to build webscoket server/client" OFF)
 option(SHERPA_ONNX_ENABLE_GPU "Enable ONNX Runtime GPU support" OFF)
 option(SHERPA_ONNX_LINK_LIBSTDCPP_STATICALLY "True to link libstdc++ statically. Used only when BUILD_SHARED_LIBS is OFF on Linux" ON)
 

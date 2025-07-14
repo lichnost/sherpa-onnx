@@ -70,3 +70,60 @@ python sherpa-onnx/python-api-examples/online-websocket-client-decode-file-cert.
  - `<AR>`, Arabic
  - `<TH>`, Thai
  - `<ID>`, Indonisian
+
+
+# Сборка для GO
+
+Сборка библиотеки в PowerShell:
+
+```shell
+# Make 64 bit
+pyenv local 3.11.3
+$env:SHERPA_ONNX_CMAKE_ARGS = "-A x64"
+python3 setup.py build --plat-name win-amd64
+
+cp -R ./build/sherpa_onnx ./build/sherpa_onnx_amd64
+rm ./build/sherpa_onnx -r -Force
+
+pyenv local 3.11.3-win32
+$env:SHERPA_ONNX_CMAKE_ARGS = "-A Win32"
+python3 setup.py build --plat-name win32
+
+cp -R ./build/sherpa_onnx ./build/sherpa_onnx_win32
+rm ./build/sherpa_onnx -r -Force
+```
+
+
+Релиз обертки GO в bash:
+
+```shell
+cd ./scripts/go
+
+git clone git@github.com:lichnost/sherpa-onnx-go-windows.git
+cp -v ./sherpa_onnx.go ./sherpa-onnx-go-windows/
+cp -v ../../sherpa_onnx/c-api/c-api.h ./sherpa-onnx-go-windows
+
+rm -fv sherpa-onnx-go-windows/lib/x86_64-pc-windows-gnu/*
+dst=$(realpath sherpa-onnx-go-windows/lib/x86_64-pc-windows-gnu)
+
+cp -v ../../build/sherpa_onnx_win32/bin/*.dll $dst
+cp -v ../../build/sherpa_onnx_win32/bin/*.lib $dst
+
+
+rm -fv sherpa-onnx-go-windows/lib/i686-pc-windows-gnu/*
+dst=$(realpath sherpa-onnx-go-windows/lib/i686-pc-windows-gnu)
+
+cp -v ../../build/sherpa_onnx_amd64/bin/*.dll $dst
+cp -v ../../build/sherpa_onnx_amd64/bin/*.lib $dst
+
+echo "------------------------------"
+cd sherpa-onnx-go-windows
+git status
+git add .
+git commit -m "Release v$SHERPA_ONNX_VERSION" && \
+git push && \
+git tag v$SHERPA_ONNX_VERSION && \
+git push origin v$SHERPA_ONNX_VERSION || true
+cd ..
+rm -rf sherpa-onnx-go-windows
+```
